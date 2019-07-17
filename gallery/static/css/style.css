@@ -1,0 +1,15 @@
+.photo-panel{
+    width: 31%;
+    margin: 2%;
+    border: 1px solid lightgray;
+    overflow: hidden;
+    display: inline-grid;
+    background-size: cover;
+    background-position: center;
+    border-radius: 5px;
+}
+
+.photo-panel:hover{
+    transform: scale(1.02) rotate(1deg);
+    transition-duration: 0.5s;
+}

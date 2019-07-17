@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+    {% for p in photos %}
+        <div class="photo-panel" style="background-image: url({{p.image.url}})"></div>
+    {% endfor %}
+
+    <script>
+        var w = $(".photo-panel").css("width");
+        $(".photo-panel").css("height", w);
+        
+    </script>
+
+{% endblock %}
