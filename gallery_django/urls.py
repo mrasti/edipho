@@ -19,10 +19,12 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path
 from gallery.views import photo_list
+from django.views.generic import RedirectView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', photo_list, name='photo_list')
+    path('', photo_list, name='photo_list'),
+    # url(r'^favicon\.ico$',RedirectView.as_view(url='/static/images/favicon.ico'))
 ]
 
 if settings.DEBUG:

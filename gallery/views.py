@@ -3,7 +3,7 @@ from .models import Photo
 
 def photo_list(request):
     queryset = Photo.objects.all()
-    return render(request, "photo.html", {"photos": queryset})
+    return render(request, "photos.html", {"photos": queryset})
 
 
 # another way to get all objects

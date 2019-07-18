@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+    {% for p in photos %}
+        <div class="photo-panel" onclick="displayImage(this)" style="background-image: url({{p.image.url}})" data-src-url="{{p.image.url}}" data-title="{{p.title}}" data-location="{{p.location}}"></div>
+    {% endfor %}
+
+    <div id="fullsize" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div id="fullimagediv">
+            <div id="image-side">
+                <img class="modal-content" id="fullimage"></img>
+            </div>
+            <div id="config-side">
+                <div class="configElement">
+                    <label for="BrightnessSlider">Brightness (<span id="BrightnessValue">0</span>)</label>
+                    <br>
+                    <input id="BrightnessSlider" type="range" value="0" min="-100" max="100" onmouseup="applyBrightness(event)">
+                </div>
+                <div class="configElement">
+                    <label for="ContrastSlider">Contrast (<span id="ContrastValue">0</span>)</label>
+                    <br>
+                    <input id="ContrastSlider" type="range" value="0" min="-100" max="100" onmouseup="applyContrast(event)">
+                </div>
+                <div class="configElement">
+                    <label for="HueSlider">Hue (<span id="HueValue">0</span>)</label>
+                    <br>
+                    <input id="HueSlider" type="range" value="0" min="0" max="360" onmouseup="applyHue(event)">
+                </div>
+                <div class="configElement">
+                    <label for="InvertSlider">Invert (<span id="InvertValue">0</span>)</label>
+                    <br>
+                    <input id="InvertSlider" type="range" value="0" min="0" max="100" onmouseup="applyInvert(event)">
+                </div>
+                <div class="configElement">
+                    <label for="BlurSlider">Blur (<span id="BlurValue">0</span>)</label>
+                    <br>
+                    <input id="BlurSlider" type="range" value="0" min="0" max="20" onmouseup="applyBlur(event)">
+                </div>
+                <div class="filter">
+                    <button onmouseup="filterBlackAndWhite(event)">Black & White</button>
+                </div>
+                <div class="filter">
+                    <button onmouseup="filterSepia(event)">Sepia</button>
+                </div>
+                <div class="reset">
+                    <button onmouseup="resetImage()">Reset</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- <div id="caption"></div> -->
+    </div>
+
+    <script>
+        var w = $(".photo-panel").css("width");
+        $(".photo-panel").css("height", w);
+        
+        function closeModal(){
+            $("#fullimage").removeAttr('style');
+            $("#fullsize").hide();
+        }
+
+        function setDimensions(){
+            var h = $("#fullimage").css("height");
+            var w = $("#fullimage").css("width");
+            $("#fullimage").css("height", "auto");
+            $("#fullimage").css("width", "auto");
+            if(h>w){
+                $("#fullimage").css("height", "100%");
+            }else{
+                $("#fullimage").css("width", "90%");
+            }
+        }
+
+        function displayImage(elem){
+            $("#fullsize").show();
+            
+            var url = $(elem).attr('data-src-url');
+            $("#fullimage").attr("src", url);
+
+            setDimensions()
+
+            $("#caption").html(
+                $(elem).attr("data-title")!='None' ? $(elem).attr("data-title") : ''
+                + "<br/>" + 
+                ($(elem).attr("data-location")!='None' ? $(elem).attr("data-location"):''));
+        }
+
+        window.onkeydown = function(event){
+            if(event.keyCode == 27){
+                closeModal();
+            }
+        };
+
+        function applyBrightness(event){
+            $("#fullimage").css("filter", "brightness({{event.target.value}} + %)");
+            // {{event.target.value}} ----------- ???
+        }
+
+        function applyContrast(event){
+            $("#fullimage").css("filter", "contrast(0.2)");
+        }
+
+        function applyHue(event){
+            $("#fullimage").css("filter", "hue-rotate(-70deg)");
+        }
+
+        function applyInvert(event){
+            $("#fullimage").css("filter", "invert(20%)");
+        }
+        function applyBlur(event){
+            $("#fullimage").css("filter", "blur(20px)");
+        }
+
+        function filterBlackAndWhite(event){
+            $("#fullimage").css("filter", "grayscale(50%)");
+        }
+
+        function filterSepia(event){
+            $("#fullimage").css("filter", "sepia(100%)");
+        }
+
+        function resetImage(){
+            $("#fullimage").removeAttr('style');
+            setDimensions();
+            $("#HueSlider").attr("value", "0");  
+            // --------------------------- ???
+        }
+
+    </script>
+
+{% endblock %}
