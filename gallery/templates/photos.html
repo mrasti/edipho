@@ -15,36 +15,45 @@
                 <div class="configElement">
                     <label for="BrightnessSlider">Brightness (<span id="BrightnessValue">0</span>)</label>
                     <br>
-                    <input id="BrightnessSlider" type="range" value="0" min="-100" max="100" onmouseup="applyBrightness(event)">
+                    <input id="BrightnessSlider" type="range" value="0" min="-100" max="100" oninput="imageFilter.brightness = this.value; applyFilters();">
                 </div>
                 <div class="configElement">
                     <label for="ContrastSlider">Contrast (<span id="ContrastValue">0</span>)</label>
                     <br>
-                    <input id="ContrastSlider" type="range" value="0" min="-100" max="100" onmouseup="applyContrast(event)">
+                    <input id="ContrastSlider" type="range" value="0" min="-100" max="100" oninput="imageFilter.contrast = this.value; applyFilters();">
                 </div>
                 <div class="configElement">
                     <label for="HueSlider">Hue (<span id="HueValue">0</span>)</label>
                     <br>
-                    <input id="HueSlider" type="range" value="0" min="0" max="360" onmouseup="applyHue(event)">
+                    <input id="HueSlider" type="range" value="0" min="-180" max="180" oninput="imageFilter.hue = this.value; applyFilters();">
+                </div>
+                <div class="configElement">
+                    <label for="SaturateSlider">Saturation (<span id="SaturateValue">0</span>)</label>
+                    <br>
+                    <input id="SaturateSlider" type="range" value="0" min="-100" max="100" oninput="imageFilter.saturate = this.value; applyFilters();">
                 </div>
                 <div class="configElement">
                     <label for="InvertSlider">Invert (<span id="InvertValue">0</span>)</label>
                     <br>
-                    <input id="InvertSlider" type="range" value="0" min="0" max="100" onmouseup="applyInvert(event)">
+                    <input id="InvertSlider" type="range" value="0" min="0" max="100" oninput="imageFilter.invert = this.value; applyFilters();">
                 </div>
                 <div class="configElement">
                     <label for="BlurSlider">Blur (<span id="BlurValue">0</span>)</label>
                     <br>
-                    <input id="BlurSlider" type="range" value="0" min="0" max="20" onmouseup="applyBlur(event)">
+                    <input id="BlurSlider" type="range" value="0" min="0" max="20" oninput="imageFilter.blur = this.value; applyFilters();">
                 </div>
-                <div class="filter">
-                    <button onmouseup="filterBlackAndWhite(event)">Black & White</button>
+                <div class="configElement">
+                    <label for="BWSlider">Black & White (<span id="BWValue">0</span>)</label>
+                    <br>
+                    <input id="BWSlider" type="range" value="0" min="0" max="100" oninput="imageFilter.grayscale = this.value; applyFilters();">
                 </div>
-                <div class="filter">
-                    <button onmouseup="filterSepia(event)">Sepia</button>
+                <div class="configElement">
+                    <label for="SepiaSlider">Sepia (<span id="SepiaValue">0</span>)</label>
+                    <br>
+                    <input id="SepiaSlider" type="range" value="0" min="0" max="100" oninput="imageFilter.sepia = this.value; applyFilters();">
                 </div>
                 <div class="reset">
-                    <button onmouseup="resetImage()">Reset</button>
+                    <button onclick="resetSliders()">Reset</button>
                 </div>
             </div>
         </div>
@@ -57,13 +66,14 @@
         $(".photo-panel").css("height", w);
         
         function closeModal(){
-            $("#fullimage").removeAttr('style');
             $("#fullsize").hide();
+            resetSliders();
         }
 
         function setDimensions(){
-            var h = $("#fullimage").css("height");
-            var w = $("#fullimage").css("width");
+            var img = document.getElementById('fullimage');
+            var h = img.clientHeight;
+            var w = img.clientWidth;
             $("#fullimage").css("height", "auto");
             $("#fullimage").css("width", "auto");
             if(h>w){
@@ -93,39 +103,53 @@
             }
         };
 
-        function applyBrightness(event){
-            $("#fullimage").css("filter", "brightness({{event.target.value}} + %)");
-            // {{event.target.value}} ----------- ???
+        var imageFilter = {
+            brightness: 0,
+            contrast: 0,
+            hue: 0,
+            invert: 0,
+            blur: 0,
+            grayscale: 0,
+            sepia: 0,
+            saturate: 0
+        };
+
+        function applyFilters(){
+            $("#BrightnessValue").text(imageFilter.brightness);
+            $("#ContrastValue").text(imageFilter.contrast);
+            $("#HueValue").text(imageFilter.hue);
+            $("#InvertValue").text(imageFilter.invert);
+            $("#BlurValue").text(imageFilter.blur);
+            $("#BWValue").text(imageFilter.grayscale);
+            $("#SepiaValue").text(imageFilter.sepia);
+            $("#SaturateValue").text(imageFilter.saturate);
+
+            $("#fullimage").css("filter", "brightness("+(parseInt(imageFilter.brightness)/100 + 1)+") "+
+                                            "contrast("+(parseInt(imageFilter.contrast)/100 + 1)+") "+
+                                            "hue-rotate("+imageFilter.hue+"deg) "+
+                                            "saturate("+(parseInt(imageFilter.saturate)/100 + 1)+") "+
+                                            "invert("+(parseInt(imageFilter.invert)/100)+") "+
+                                            "blur("+imageFilter.blur+"px) "+
+                                            "grayscale("+imageFilter.grayscale+"%) "+
+                                            "sepia("+imageFilter.sepia+"%)");
         }
 
-        function applyContrast(event){
-            $("#fullimage").css("filter", "contrast(0.2)");
-        }
-
-        function applyHue(event){
-            $("#fullimage").css("filter", "hue-rotate(-70deg)");
-        }
-
-        function applyInvert(event){
-            $("#fullimage").css("filter", "invert(20%)");
-        }
-        function applyBlur(event){
-            $("#fullimage").css("filter", "blur(20px)");
-        }
-
-        function filterBlackAndWhite(event){
-            $("#fullimage").css("filter", "grayscale(50%)");
-        }
-
-        function filterSepia(event){
-            $("#fullimage").css("filter", "sepia(100%)");
-        }
-
-        function resetImage(){
+        function resetSliders(){
             $("#fullimage").removeAttr('style');
+            
             setDimensions();
-            $("#HueSlider").attr("value", "0");  
-            // --------------------------- ???
+            $("input[type=range]").val("0");
+            imageFilter = {
+                brightness: 0,
+                contrast: 0,
+                hue: 0,
+                invert: 0,
+                blur: 0,
+                grayscale: 0,
+                sepia: 0,
+                saturate: 0
+            };
+            applyFilters();
         }
 
     </script>
