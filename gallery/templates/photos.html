@@ -2,7 +2,7 @@
 {% load staticfiles %}
 {% block content %}
     {% for p in photos %}
-        <div class="photo-panel" onclick="displayImage(this)" style="background-image: url({{p.image.url}})" data-src-url="{{p.image.url}}" data-title="{{p.title}}" data-location="{{p.location}}"></div>
+        <div class="photo-panel" onclick="displayImage(this)" style="background-image: url({{p.image.url}})" data-src-id="{{p.id}}" data-src-url="{{p.image.url}}" data-title="{{p.title}}" data-location="{{p.location}}" data-filters="{{p.filter}}"></div>
     {% endfor %}
 
     <div id="fullsize" class="modal">
@@ -54,17 +54,28 @@
                 </div>
                 <div class="reset">
                     <button onclick="resetSliders()">Reset</button>
+                    <button onclick="save()">Save</button>
+                    {% csrf_token %}
                 </div>
             </div>
         </div>
-        
-        <!-- <div id="caption"></div> -->
     </div>
 
     <script>
         var w = $(".photo-panel").css("width");
         $(".photo-panel").css("height", w);
-        
+        var imageFilter = {
+            brightness: 0,
+            contrast: 0,
+            hue: 0,
+            invert: 0,
+            blur: 0,
+            grayscale: 0,
+            sepia: 0,
+            saturate: 0
+        };
+        var currentPhotoId;
+
         function closeModal(){
             $("#fullsize").hide();
             resetSliders();
@@ -89,7 +100,13 @@
             var url = $(elem).attr('data-src-url');
             $("#fullimage").attr("src", url);
 
-            setDimensions()
+            setDimensions();
+            currentPhotoId = $(elem).attr('data-src-id');
+            var filter = $(elem).attr('data-filters');
+            if(filter) {
+                imageFilter = JSON.parse(filter);
+                applyFilters();
+            }
 
             $("#caption").html(
                 $(elem).attr("data-title")!='None' ? $(elem).attr("data-title") : ''
@@ -103,35 +120,36 @@
             }
         };
 
-        var imageFilter = {
-            brightness: 0,
-            contrast: 0,
-            hue: 0,
-            invert: 0,
-            blur: 0,
-            grayscale: 0,
-            sepia: 0,
-            saturate: 0
-        };
+        function getFilterString(filterObject){
+            return "brightness("+(parseInt(filterObject.brightness)/100 + 1)+") "+
+                    "contrast("+(parseInt(filterObject.contrast)/100 + 1)+") "+
+                    "hue-rotate("+filterObject.hue+"deg) "+
+                    "saturate("+(parseInt(filterObject.saturate)/100 + 1)+") "+
+                    "invert("+(parseInt(filterObject.invert)/100)+") "+
+                    "blur("+filterObject.blur+"px) "+
+                    "grayscale("+filterObject.grayscale+"%) "+
+                    "sepia("+filterObject.sepia+"%)";
+        }
 
         function applyFilters(){
+            $("#BrightnessSlider").val(imageFilter.brightness);
             $("#BrightnessValue").text(imageFilter.brightness);
+            $("#ContrastSlider").val(imageFilter.contrast);
             $("#ContrastValue").text(imageFilter.contrast);
+            $("#HueSlider").val(imageFilter.hue);
             $("#HueValue").text(imageFilter.hue);
+            $("#InvertSlider").val(imageFilter.invert);
             $("#InvertValue").text(imageFilter.invert);
+            $("#BlurSlider").val(imageFilter.blur);
             $("#BlurValue").text(imageFilter.blur);
+            $("#BWSlider").val(imageFilter.grayscale);
             $("#BWValue").text(imageFilter.grayscale);
+            $("#SepiaSlider").val(imageFilter.sepia);
             $("#SepiaValue").text(imageFilter.sepia);
+            $("#SaturateSlider").val(imageFilter.saturate);
             $("#SaturateValue").text(imageFilter.saturate);
 
-            $("#fullimage").css("filter", "brightness("+(parseInt(imageFilter.brightness)/100 + 1)+") "+
-                                            "contrast("+(parseInt(imageFilter.contrast)/100 + 1)+") "+
-                                            "hue-rotate("+imageFilter.hue+"deg) "+
-                                            "saturate("+(parseInt(imageFilter.saturate)/100 + 1)+") "+
-                                            "invert("+(parseInt(imageFilter.invert)/100)+") "+
-                                            "blur("+imageFilter.blur+"px) "+
-                                            "grayscale("+imageFilter.grayscale+"%) "+
-                                            "sepia("+imageFilter.sepia+"%)");
+            $("#fullimage").css("filter", getFilterString(imageFilter));
         }
 
         function resetSliders(){
@@ -151,6 +169,33 @@
             };
             applyFilters();
         }
+
+        function save(){
+            var data = new FormData();
+            data.append('filters', JSON.stringify(imageFilter));
+            data.append('csrfmiddlewaretoken', $('input[name="csrfmiddlewaretoken"]').val());
+            fetch("/photo/"+currentPhotoId+"/update", {
+                method: "POST", 
+                body: data,
+                credentials: 'same-origin'
+            });
+
+            $("div[data-src-id="+currentPhotoId+"]").attr('data-filters', JSON.stringify(imageFilter));
+            showFilters();
+            closeModal();
+        }
+
+        function showFilters(){
+            var photoPanels = $(".photo-panel");
+            photoPanels.map(p => {
+                var filter = $(photoPanels[p]).attr('data-filters');
+                if(!filter) return;
+                filter = JSON.parse(filter);
+                $(photoPanels[p]).css('filter', getFilterString(filter));
+            });
+        }
+        
+        showFilters();
 
     </script>
 
