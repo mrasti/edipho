@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% block content %}
+    <nav>
+        <h3>
+            <a href="/photos/new"> Add Photo </a> | <a href="/logout">Log Out </a>
+        </h3>
+    </nav>
     {% for p in photos %}
         <div class="photo-panel" onclick="displayImage(this)" style="background-image: url({{p.image.url}})" data-src-id="{{p.id}}" data-src-url="{{p.image.url}}" data-title="{{p.title}}" data-location="{{p.location}}" data-filters="{{p.filter}}"></div>
     {% endfor %}

@@ -1,6 +1,26 @@
 
+/* --------------------------------- Home page style sheet  --------------------------------- */
 #photo-container{
     padding: 7%;
+    padding-top: 1%;
+}
+
+nav{
+    font-family: Arial, Helvetica, sans-serif;
+    color: black;
+    padding-top: 2%;
+    padding-left: 2.5%;
+}
+
+nav a{
+    font-family: Arial, Helvetica, sans-serif;
+    color: black;
+    text-decoration: none;
+}
+
+a{
+    margin-right: 4px;
+    margin-left: 4px;
 }
 
 .photo-panel{
@@ -110,14 +130,14 @@ input[type=range]{
     width: 300px;
 }
 
-/* ------------------------------------- Log in page styles ------------------------------------- */
+/* --------------------------------- Login page style sheet  --------------------------------- */
 
 html,
 body {
     height: 100%;
 }
 
-.login-container{
+.form-container{
     height: 100%;
     display: flex;
     justify-content: center;
