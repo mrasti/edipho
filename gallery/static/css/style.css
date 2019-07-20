@@ -1,4 +1,30 @@
 
+form{
+    width: 300px;
+}
+
+#id_username, #id_password, #id_password1, #id_password2, #login-btn, #signup-btn{
+    width: 300px;
+    height: 50px;
+    margin: 5px 0px;
+}
+
+#hint_id_username, #hint_id_password1, #hint_id_password2{
+    display: none;
+}
+
+.form-container{
+    padding: 120px;
+}
+
+small{
+    display: none;
+}
+
+/* body.login{
+    background-image: url("./static/images/IMG_0982_b.jpg");
+} */
+
 /* --------------------------------- Home page style sheet  --------------------------------- */
 #photo-container{
     padding: 7%;
@@ -7,15 +33,18 @@
 
 nav{
     font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
     color: black;
     padding-top: 2%;
-    padding-left: 2.5%;
+    padding-left: 2.5%
+    !important 
 }
 
 nav a{
     font-family: Arial, Helvetica, sans-serif;
     color: black;
-    text-decoration: none;
+    text-decoration: none
+    !important 
 }
 
 a{

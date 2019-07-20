@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block content %}
-<h3>Sign up!</h3>
 <div class="form-container">
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Sign Up</button>
+        {{ form|crispy }}
+        <button type="submit" id="signup-btn" class="btn btn-primary">Sign Up</button>
     </form>
 </div>
 {% endblock %}
+<script>
+        document.getElementById('photo-container').style.backgroundColor='black'
+</script>
