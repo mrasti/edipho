@@ -2,7 +2,7 @@
 {% load staticfiles %}
 {% block content %}
     <nav>
-        <h3>
+        <h3 id="navbar">
             <a href="/photos/new"> Add Photo </a> | <a href="/logout">Log Out </a>
         </h3>
     </nav>
@@ -57,9 +57,9 @@
                     <br>
                     <input id="SepiaSlider" type="range" value="0" min="0" max="100" oninput="imageFilter.sepia = this.value; applyFilters();">
                 </div>
-                <div class="reset">
-                    <button onclick="resetSliders()">Reset</button>
-                    <button onclick="save()">Save</button>
+                <div class="edit-btns">
+                    <button class="edit-btn btn btn-light border" onclick="resetSliders()">Reset</button>
+                    <button class="edit-btn btn btn-light border" onclick="save()">Save</button>
                     {% csrf_token %}
                 </div>
             </div>

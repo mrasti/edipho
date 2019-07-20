@@ -1,4 +1,6 @@
 
+/* ---------------------------- login and signup page style sheet  ---------------------------- */
+
 form{
     width: 300px;
 }
@@ -26,31 +28,33 @@ small{
 } */
 
 /* --------------------------------- Home page style sheet  --------------------------------- */
+
 #photo-container{
     padding: 7%;
     padding-top: 1%;
 }
 
-nav{
+h3#navbar{
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 12px;
     color: black;
-    padding-top: 2%;
+    font-size: 19px;
+    font-weight: bold;
+    padding-top: 4%;
+    padding-bottom:1%;
     padding-left: 2.5%
-    !important 
 }
 
 nav a{
-    font-family: Arial, Helvetica, sans-serif;
     color: black;
-    text-decoration: none
-    !important 
-}
-
-a{
     margin-right: 4px;
     margin-left: 4px;
+    text-decoration: none !important ;
+    color: black !important
 }
+
+/* a:hover{
+    color: black
+} */
 
 .photo-panel{
     width: 340px;
@@ -75,7 +79,7 @@ a{
     left: 0;
     top: 0;
     width: 100%; /* Full width */
-    height: 90%; /* Full height */
+    height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
@@ -146,6 +150,13 @@ a{
     left: 0;
 }
 
+#fullimage{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* margin-top: 30px; */
+}
+
 #image-side{
     text-align: center;
     width: 70%;
@@ -159,16 +170,25 @@ input[type=range]{
     width: 300px;
 }
 
-/* --------------------------------- Login page style sheet  --------------------------------- */
-
-html,
-body {
-    height: 100%;
+.edit-btns{
+    margin:8px;
 }
 
-.form-container{
+.edit-btn{
+    width: 140px;
+    margin: 2px;
+}
+
+/* --------------------------------- Login page style sheet  --------------------------------- */
+
+/* html,
+body {
+    height: 100%; */
+/* } */
+
+/* .form-container{
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-}
+} */
