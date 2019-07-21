@@ -1,76 +1,78 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% block content %}
-    <nav>
-        <h3 id="navbar">
-            <a href="#" onclick="addPhoto()"> Add Photo </a> | <a href="/logout">Log Out </a>
-        </h3>
-    </nav>
-    {% for p in photos %}
-        <div class="photo-panel" onclick="displayImage(this)" style="background-image: url({{p.image.url}})" data-src-id="{{p.id}}" data-src-url="{{p.image.url}}" data-title="{{p.title}}" data-location="{{p.location}}" data-filters="{{p.filter}}"></div>
-    {% endfor %}
 
-    <div id="addphotodiv" class="modal">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <div id="formpanel" style="background-color: white;"></div>
-    </div>
+    <div class="main">
+        {% include 'menu.html' with p=profile %}
+        <div class="photo-panel-container">
+            {% for p in photos %}
+                <div class="photo-panel" onclick="displayImage(this)" style="background-image: url({{p.image.url}})" data-src-id="{{p.id}}" data-src-url="{{p.image.url}}" data-title="{{p.title}}" data-location="{{p.location}}" data-filters="{{p.filter}}"></div>
+            {% endfor %}
+        </div>
+        <div id="addphotodiv" class="modal">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="formpanel" style="background-color: white;"></div>
+        </div>
 
-    <div id="fullsize" class="modal">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <div id="fullimagediv">
-            <div id="image-side">
-                <img class="modal-content" id="fullimage"></img>
-            </div>
-            <div id="config-side">
-                <div class="configElement">
-                    <label for="BrightnessSlider">Brightness (<span id="BrightnessValue">0</span>)</label>
-                    <br>
-                    <input id="BrightnessSlider" type="range" value="0" min="-100" max="100" oninput="imageFilter.brightness = this.value; applyFilters();">
+        <div id="fullsize" class="modal">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="fullimagediv">
+                <div id="image-side">
+                    <img class="modal-content" id="fullimage"></img>
                 </div>
-                <div class="configElement">
-                    <label for="ContrastSlider">Contrast (<span id="ContrastValue">0</span>)</label>
-                    <br>
-                    <input id="ContrastSlider" type="range" value="0" min="-100" max="100" oninput="imageFilter.contrast = this.value; applyFilters();">
-                </div>
-                <div class="configElement">
-                    <label for="HueSlider">Hue (<span id="HueValue">0</span>)</label>
-                    <br>
-                    <input id="HueSlider" type="range" value="0" min="-180" max="180" oninput="imageFilter.hue = this.value; applyFilters();">
-                </div>
-                <div class="configElement">
-                    <label for="SaturateSlider">Saturation (<span id="SaturateValue">0</span>)</label>
-                    <br>
-                    <input id="SaturateSlider" type="range" value="0" min="0" max="100" oninput="imageFilter.saturate = this.value; applyFilters();">
-                </div>
-                <div class="configElement">
-                    <label for="InvertSlider">Invert (<span id="InvertValue">0</span>)</label>
-                    <br>
-                    <input id="InvertSlider" type="range" value="0" min="0" max="100" oninput="imageFilter.invert = this.value; applyFilters();">
-                </div>
-                <div class="configElement">
-                    <label for="BlurSlider">Blur (<span id="BlurValue">0</span>)</label>
-                    <br>
-                    <input id="BlurSlider" type="range" value="0" min="0" max="20" oninput="imageFilter.blur = this.value; applyFilters();">
-                </div>
-                <div class="configElement">
-                    <label for="BWSlider">Black & White (<span id="BWValue">0</span>)</label>
-                    <br>
-                    <input id="BWSlider" type="range" value="0" min="0" max="100" oninput="imageFilter.grayscale = this.value; applyFilters();">
-                </div>
-                <div class="configElement">
-                    <label for="SepiaSlider">Sepia (<span id="SepiaValue">0</span>)</label>
-                    <br>
-                    <input id="SepiaSlider" type="range" value="0" min="0" max="100" oninput="imageFilter.sepia = this.value; applyFilters();">
-                </div>
-                <div class="edit-btns">
-                    <button class="edit-btn btn btn-light border" onclick="resetSliders()">Reset</button>
-                    <button class="edit-btn btn btn-light border" onclick="save()">Save</button>
-                    {% csrf_token %}
+                <div id="config-side">
+                    <div class="configElement">
+                        <label for="BrightnessSlider">Brightness (<span id="BrightnessValue">0</span>)</label>
+                        <br>
+                        <input id="BrightnessSlider" type="range" value="0" min="-100" max="100" oninput="imageFilter.brightness = this.value; applyFilters();">
+                    </div>
+                    <div class="configElement">
+                        <label for="ContrastSlider">Contrast (<span id="ContrastValue">0</span>)</label>
+                        <br>
+                        <input id="ContrastSlider" type="range" value="0" min="-100" max="100" oninput="imageFilter.contrast = this.value; applyFilters();">
+                    </div>
+                    <div class="configElement">
+                        <label for="HueSlider">Hue (<span id="HueValue">0</span>)</label>
+                        <br>
+                        <input id="HueSlider" type="range" value="0" min="-180" max="180" oninput="imageFilter.hue = this.value; applyFilters();">
+                    </div>
+                    <div class="configElement">
+                        <label for="SaturateSlider">Saturation (<span id="SaturateValue">0</span>)</label>
+                        <br>
+                        <input id="SaturateSlider" type="range" value="0" min="0" max="100" oninput="imageFilter.saturate = this.value; applyFilters();">
+                    </div>
+                    <div class="configElement">
+                        <label for="InvertSlider">Invert (<span id="InvertValue">0</span>)</label>
+                        <br>
+                        <input id="InvertSlider" type="range" value="0" min="0" max="100" oninput="imageFilter.invert = this.value; applyFilters();">
+                    </div>
+                    <div class="configElement">
+                        <label for="BlurSlider">Blur (<span id="BlurValue">0</span>)</label>
+                        <br>
+                        <input id="BlurSlider" type="range" value="0" min="0" max="20" oninput="imageFilter.blur = this.value; applyFilters();">
+                    </div>
+                    <div class="configElement">
+                        <label for="BWSlider">Black & White (<span id="BWValue">0</span>)</label>
+                        <br>
+                        <input id="BWSlider" type="range" value="0" min="0" max="100" oninput="imageFilter.grayscale = this.value; applyFilters();">
+                    </div>
+                    <div class="configElement">
+                        <label for="SepiaSlider">Sepia (<span id="SepiaValue">0</span>)</label>
+                        <br>
+                        <input id="SepiaSlider" type="range" value="0" min="0" max="100" oninput="imageFilter.sepia = this.value; applyFilters();">
+                    </div>
+                    <div class="edit-btns">
+                        <button class="edit-btn btn btn-light border" onclick="resetSliders()">Reset</button>
+
+                        {% if editable == True %}
+                        <button class="edit-btn btn btn-light border" onclick="save()">Save</button>
+                        {% csrf_token %}
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
     <script>
         var w = $(".photo-panel").css("width");
         $(".photo-panel").css("height", w);

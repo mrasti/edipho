@@ -1,0 +1,18 @@
+
+<div>
+    {% if p.picture == '' %}
+    <div style="width: 40px; height: 40px; border-radius: 50%; background-color: {{p.default_color}}; display: inline-block;"></div>
+    {% else %}
+    <img src={{p.picture.url}} style="width: 40px; height: 40px; border-radius: 50%;"/>
+    {% endif %}
+    <a href="/gallery" style="text-decoration: none; font-weight: bold;">{{p.name}}</a>
+</div>
+
+<nav id="navelement">
+    <h3 id="navbar">
+        <a href="#" onclick="addPhoto()"> Add Photo </a> |
+        <a href="/discover"> Discover People </a> |
+        <a href="/profile"> Edit Profile </a> |
+        <a href="/logout">Log Out </a>
+    </h3>
+</nav>

@@ -41,7 +41,13 @@ h3#navbar{
     font-weight: bold;
     padding-top: 4%;
     padding-bottom:1%;
-    padding-left: 2.5%
+    padding-left: 2.5%;
+}
+
+#navelement{
+    position: absolute;
+    right: 80px;
+    white-space: nowrap;
 }
 
 nav a{
@@ -49,7 +55,7 @@ nav a{
     margin-right: 4px;
     margin-left: 4px;
     text-decoration: none !important ;
-    color: black !important
+    color: black !important;
 }
 
 /* a:hover{
@@ -177,6 +183,14 @@ input[type=range]{
 .edit-btn{
     width: 140px;
     margin: 2px;
+}
+
+.main{
+    position: relative;
+}
+
+.photo-panel-container{
+    margin-top: 100px;
 }
 
 /* --------------------------------- Login page style sheet  --------------------------------- */

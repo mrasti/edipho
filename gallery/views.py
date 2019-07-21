@@ -3,8 +3,8 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views import generic
-from .models import Photo
-from .forms import PhotoForm
+from .models import Photo, Profile
+from .forms import PhotoForm, ProfileForm
 import simplejson as json
 
 class SignUp(generic.CreateView):
@@ -16,7 +16,18 @@ def photo_list(request):
 	if not request.user.is_authenticated:
 		return redirect('LoginView')
 	queryset = Photo.objects.filter(creator = request.user).order_by('id')
-	return render(request, "photos.html", {"photos": queryset})
+	return render(request, "photos.html", {"photos": queryset, "profile": get_profile(request), "editable": True})
+
+def user_page(request, pk):
+	if not request.user.is_authenticated:
+		return redirect('LoginView')
+	queryset = Photo.objects.filter(creator = pk).order_by('id')
+	return render(request, "photos.html", {"photos": queryset, "profile": get_profile(request), "editable": False})
+
+def discover(request):
+	if not request.user.is_authenticated :
+		return redirect('LoginView')
+	return render(request, 'discover.html', {'users': Profile.objects.all().exclude(user = request.user), "profile": get_profile(request)})
 
 def add_photo(request):
 	if not request.user.is_authenticated:
@@ -47,10 +58,32 @@ def photo_update(request, pk):
 		photo.filter = body['filters'][0]
 		photo.save()
 	
+def edit_profile(request):
+	if not request.user.is_authenticated :
+		return redirect('LoginView')
+
+	profile = get_profile(request)
+	if request.method == 'POST':
+		form = ProfileForm(request.POST, request.FILES, instance=profile)
+		if form.is_valid():
+			form.save()
+			return HttpResponseRedirect(reverse_lazy('photo_list'))
+		else:
+			return HttpResponseRedirect(json.dumps(form.errors))
+	else:
+		form = ProfileForm(instance=profile)
+		return render(request, 'edit_profile.html', {'form': form})
 
 
+def get_profile(request):
+	profile = Profile.objects.filter(user=request.user).first()
+	if profile == None:
+		profile = Profile(user=request.user, name=request.user.username)
+		profile.save()
+	return profile
 
-
+def home_page(request):
+	return discover(request)
 
 # another way to get all objects
 # from django.views.generic import ListView
