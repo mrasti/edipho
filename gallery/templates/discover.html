@@ -1,16 +1,22 @@
 {% extends 'base.html' %}
+
 {% load staticfiles %}
+
 {% block content %}
     <div class="main">
         {% include 'menu.html' with p=profile %}
-        <div class="photo-panel-container">
+        <div class="user-panel-container">
             {% for p in users %}
-                {% if p.picture == '' %}
-                <div class="photo-panel" style="width: 150px; height: 150px; border-radius: 50%; background-color: {{p.default_color}}"></div>
-                {% else %}
-                <div class="photo-panel" style="width: 150px; height: 150px; border-radius: 50%; background-image: url({{p.picture.url}})"></div>
-                {% endif %}
-                <a href="/user/{{p.user.id}}" style="text-decoration: none; font-weight: bold;">{{p.name}}</a>
+                <div class="user-icon">
+                    {% if p.picture == '' %}
+                    <div class="photo-panel" style="width: 150px; height: 150px; border-radius: 50%; background-color: {{p.default_color}}" onclick="window.location.href='/user/{{p.user.id}}'"></div>
+                    {% else %}
+                    <div class="photo-panel" style="width: 150px; height: 150px; border-radius: 50%; background-image: url({{p.picture.url}})" onclick="window.location.href='/user/{{p.user.id}}'"></div>
+                    {% endif %}
+                    <div style="margin-top: 10px">
+                        <a href="/user/{{p.user.id}}" style="text-decoration: none; font-weight: bold; color: black">{{p.name}}</a>
+                    </div>
+                </div>
             {% endfor %}
         </div>
     </div>

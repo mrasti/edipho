@@ -1,9 +1,14 @@
 {% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
 {% include 'menu.html' %}
 {% block content %}
-    <form method="POST" enctype="multipart/form-data">
+<div class="form-container" id="edit-profile"></div>
+    <form method="POST" action="/profile/" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ form|crispy }}
         <button type="submit">Update</button>
     </form>
+</div>
 {% endblock %}

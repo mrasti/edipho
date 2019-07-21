@@ -1,13 +1,23 @@
 {% extends 'base.html' %}
-
+{% load staticfiles %}
 {% load crispy_forms_tags %}
 
 {% block content %}
-<div class="form-container">
-    <form method="post">
+<style>
+    #photo-container {
+        padding: 0px !important;
+    }
+
+    .col-form-label{
+        color: black;
+    }
+</style>
+
+<div class="form-container" style="background-image: url({% static 'images/favicon.ico' %}); background-size: cover; background-position: center; height: 100%;">
+    <form method="POST">
         {% csrf_token %}
         {{ form|crispy }}
-        <button type="submit" id="login-btn" class="btn btn-primary">Login</button>
+        <button type="submit" id="login-btn" class="btn btn-primary">Log in</button>
         <button type="button" id="signup-btn" class="btn btn-primary" onclick="location.href='/signup'">Sign Up</button>
     </form>
 </div>

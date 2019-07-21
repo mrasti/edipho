@@ -4,16 +4,11 @@
 
     <div class="main">
         {% include 'menu.html' with p=profile %}
-        <div class="photo-panel-container">
-            {% for p in photos %}
-                <div class="photo-panel" onclick="displayImage(this)" style="background-image: url({{p.image.url}})" data-src-id="{{p.id}}" data-src-url="{{p.image.url}}" data-title="{{p.title}}" data-location="{{p.location}}" data-filters="{{p.filter}}"></div>
-            {% endfor %}
-        </div>
-        <div id="addphotodiv" class="modal">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <div id="formpanel" style="background-color: white;"></div>
-        </div>
-
+        
+        {% for p in photos %}
+            <div class="photo-panel" onclick="displayImage(this)" style="background-image: url({{p.image.url}})" data-src-id="{{p.id}}" data-src-url="{{p.image.url}}" data-title="{{p.title}}" data-location="{{p.location}}" data-filters="{{p.filter}}"></div>
+        {% endfor %}
+        
         <div id="fullsize" class="modal">
             <span class="close" onclick="closeModal()">&times;</span>
             <div id="fullimagediv">
@@ -93,17 +88,6 @@
             resetSliders();
         }
 
-        function addPhoto(){
-            $.ajax({
-                url: "photo/add",
-                type: "get",
-                success: function(response) {
-                    $("#formpanel").html(response);
-                    $("#addphotodiv").show();
-                }
-            });
-        }
-
         function setDimensions(){
             var img = document.getElementById('fullimage');
             var h = img.clientHeight;
@@ -136,12 +120,6 @@
                 + "<br/>" + 
                 ($(elem).attr("data-location")!='None' ? $(elem).attr("data-location"):''));
         }
-
-        window.onkeydown = function(event){
-            if(event.keyCode == 27){
-                closeModal();
-            }
-        };
 
         function getFilterString(filterObject){
             return "brightness("+(parseInt(filterObject.brightness)/100 + 1)+") "+
@@ -210,12 +188,12 @@
 
         function showFilters(){
             var photoPanels = $(".photo-panel");
-            photoPanels.map(p => {
-                var filter = $(photoPanels[p]).attr('data-filters');
-                if(!filter) return;
+            for(var i=0; i<photoPanels.length; i++){
+                var filter = $(photoPanels[i]).attr('data-filters');
+                if(!filter) continue;
                 filter = JSON.parse(filter);
-                $(photoPanels[p]).css('filter', getFilterString(filter));
-            });
+                $(photoPanels[i]).css('filter', getFilterString(filter));
+            }
         }
         
         showFilters();

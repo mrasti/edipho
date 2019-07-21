@@ -3,6 +3,12 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+<style>
+    .col-form-label{
+        color: black !important;
+    }
+</style>
+
 <div class="form-container">
     <form method="post">
         {% csrf_token %}

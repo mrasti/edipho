@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views import generic
 from .models import Photo, Profile
+from django.contrib.auth.models import User
 from .forms import PhotoForm, ProfileForm
 import simplejson as json
 
@@ -21,6 +22,7 @@ def photo_list(request):
 def user_page(request, pk):
 	if not request.user.is_authenticated:
 		return redirect('LoginView')
+	
 	queryset = Photo.objects.filter(creator = pk).order_by('id')
 	return render(request, "photos.html", {"photos": queryset, "profile": get_profile(request), "editable": False})
 

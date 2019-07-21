@@ -1,18 +1,61 @@
 
-<div>
+<div id="top-bar">
     {% if p.picture == '' %}
-    <div style="width: 40px; height: 40px; border-radius: 50%; background-color: {{p.default_color}}; display: inline-block;"></div>
+    <div style="width: 80px; height: 80px; border-radius: 50%; background-color: {{p.default_color}}; display: inline-block; margin: 10px"></div>
     {% else %}
-    <img src={{p.picture.url}} style="width: 40px; height: 40px; border-radius: 50%;"/>
+    <div style="width: 80px; height: 80px; border-radius: 50%; background-image: url({{p.picture.url}}); background-size: cover; background-position: center; display: inline-block; margin: 10px"></div>
     {% endif %}
-    <a href="/gallery" style="text-decoration: none; font-weight: bold;">{{p.name}}</a>
+    <a href="/gallery" style="text-decoration: none; font-size: 16px; font-weight: bold; color: black; position: absolute; top: 40px;">{{p.name}}</a>
+
+    <h3 id="navbar">
+        <a href="#" onclick="addPhoto()" style="color: black"> Add Photo </a> |
+        <a href="/discover" style="color: black"> Discover People </a> |
+        <a href="#" onclick="editProfile()" style="color: black"> Edit Profile </a> |
+        <a href="/logout" style="color: black"> Log Out </a>
+    </h3>
 </div>
 
-<nav id="navelement">
-    <h3 id="navbar">
-        <a href="#" onclick="addPhoto()"> Add Photo </a> |
-        <a href="/discover"> Discover People </a> |
-        <a href="/profile"> Edit Profile </a> |
-        <a href="/logout">Log Out </a>
-    </h3>
-</nav>
+<div id="addphotodiv" class="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <div id="formpanel"></div>
+</div>
+
+<div id="updateprofilediv" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div id="formpanel"></div>
+    </div>
+
+<script>
+    function closeModal(){
+        $(".modal").hide();
+        resetSliders();
+    }
+
+    function addPhoto(){
+        $.ajax({
+            url: window.location.origin + "/photo/add",
+            type: "get",
+            success: function(response) {
+                $("#formpanel").html(response);
+                $("#addphotodiv").show();
+            }
+        });
+    }
+
+    function editProfile(){
+        $.ajax({
+            url: window.location.origin + "/profile",
+            type: "get",
+            success: function(response) {
+                $("#formpanel").html(response);
+                $("#addphotodiv").show();
+            }
+        });
+    }
+
+    window.onkeydown = function(event){
+        if(event.keyCode == 27){
+            closeModal();
+        }
+    };
+</script>
