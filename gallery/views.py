@@ -15,13 +15,17 @@ class SignUp(generic.CreateView):
 def photo_list(request):
 	if not request.user.is_authenticated:
 		return redirect('LoginView')
-	queryset = Photo.objects.all().order_by('id')
+	queryset = Photo.objects.filter(creator = request.user).order_by('id')
 	return render(request, "photos.html", {"photos": queryset})
 
 def add_photo(request):
+	if not request.user.is_authenticated:
+		return redirect('LoginView')
+
 	if request.method == 'POST':
 		form = PhotoForm(request.POST, request.FILES)
 		if form.is_valid():
+			form.instance.creator = request.user
 			form.save()
 			return HttpResponseRedirect(reverse_lazy('photo_list'))
 		else:
