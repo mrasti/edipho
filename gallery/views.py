@@ -1,8 +1,11 @@
 from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views import generic
 from .models import Photo
+from .forms import PhotoForm
+import simplejson as json
 
 class SignUp(generic.CreateView):
     form_class = UserCreationForm
@@ -14,6 +17,18 @@ def photo_list(request):
 		return redirect('LoginView')
 	queryset = Photo.objects.all().order_by('id')
 	return render(request, "photos.html", {"photos": queryset})
+
+def add_photo(request):
+	if request.method == 'POST':
+		form = PhotoForm(request.POST, request.FILES)
+		if form.is_valid():
+			form.save()
+			return HttpResponseRedirect(reverse_lazy('photo_list'))
+		else:
+			return HttpResponseRedirect(json.dumps(form.errors))
+	else:
+		form = PhotoForm()
+		return render(request, 'add_photo.html', {'form': form})
 
 
 def redirect_home(request):

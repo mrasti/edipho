@@ -3,12 +3,17 @@
 {% block content %}
     <nav>
         <h3 id="navbar">
-            <a href="/photos/new"> Add Photo </a> | <a href="/logout">Log Out </a>
+            <a href="#" onclick="addPhoto()"> Add Photo </a> | <a href="/logout">Log Out </a>
         </h3>
     </nav>
     {% for p in photos %}
         <div class="photo-panel" onclick="displayImage(this)" style="background-image: url({{p.image.url}})" data-src-id="{{p.id}}" data-src-url="{{p.image.url}}" data-title="{{p.title}}" data-location="{{p.location}}" data-filters="{{p.filter}}"></div>
     {% endfor %}
+
+    <div id="addphotodiv" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div id="formpanel" style="background-color: white;"></div>
+    </div>
 
     <div id="fullsize" class="modal">
         <span class="close" onclick="closeModal()">&times;</span>
@@ -82,8 +87,19 @@
         var currentPhotoId;
 
         function closeModal(){
-            $("#fullsize").hide();
+            $(".modal").hide();
             resetSliders();
+        }
+
+        function addPhoto(){
+            $.ajax({
+                url: "photo/add",
+                type: "get",
+                success: function(response) {
+                    $("#formpanel").html(response);
+                    $("#addphotodiv").show();
+                }
+            });
         }
 
         function setDimensions(){
