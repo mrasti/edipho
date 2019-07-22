@@ -4,6 +4,17 @@
 
 {% include 'menu.html' %}
 {% block content %}
+<style>
+    .form-container {
+        padding: 0px;
+    }
+
+    form div{
+        color: white;
+    }
+
+</style>
+
 <div class="form-container" id="edit-profile"></div>
     <form method="POST" action="/profile/" enctype="multipart/form-data">
         {% csrf_token %}

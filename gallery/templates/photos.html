@@ -5,6 +5,17 @@
     <div class="main">
         {% include 'menu.html' with p=profile %}
         
+        {% if user_profile != None %}
+            {% if user_profile.picture == '' %}
+            <div style="width: 80px; height: 80px; border-radius: 50%; background-color: {{user_profile.default_color}}; display: inline-block; margin: 10px"></div>
+            {% else %}
+            <div style="width: 80px; height: 80px; border-radius: 50%; background-image: url({{user_profile.picture.url}}); background-size: cover; background-position: center; display: inline-block; margin: 10px"></div>
+            {% endif %}
+            <div style="margin-left: 20px">
+                <label style="text-decoration: none; font-weight: bold; color: black">{{user_profile.name}}</label>
+            </div>
+        {% endif %}
+
         {% for p in photos %}
             <div class="photo-panel" onclick="displayImage(this)" style="background-image: url({{p.image.url}})" data-src-id="{{p.id}}" data-src-url="{{p.image.url}}" data-title="{{p.title}}" data-location="{{p.location}}" data-filters="{{p.filter}}"></div>
         {% endfor %}

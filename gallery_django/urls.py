@@ -24,5 +24,5 @@ from django.conf.urls import include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('gallery.urls')),
-    # url(r'^favicon\.ico$',RedirectView.as_view(url='/static/images/favicon.ico'))
+    url(r'^favicon\.ico$',RedirectView.as_view(url='/static/images/favicon.ico'))
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

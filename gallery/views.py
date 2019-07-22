@@ -17,19 +17,19 @@ def photo_list(request):
 	if not request.user.is_authenticated:
 		return redirect('LoginView')
 	queryset = Photo.objects.filter(creator = request.user).order_by('id')
-	return render(request, "photos.html", {"photos": queryset, "profile": get_profile(request), "editable": True})
+	return render(request, "photos.html", {"photos": queryset, "profile": get_profile(request), "editable": True, "user_profile": None})
 
 def user_page(request, pk):
 	if not request.user.is_authenticated:
 		return redirect('LoginView')
-	
+	user_profile = Profile.objects.filter(user = pk).first()
 	queryset = Photo.objects.filter(creator = pk).order_by('id')
-	return render(request, "photos.html", {"photos": queryset, "profile": get_profile(request), "editable": False})
+	return render(request, "photos.html", {"photos": queryset, "profile": get_profile(request), "editable": False, "user_profile": user_profile})
 
 def discover(request):
 	if not request.user.is_authenticated :
 		return redirect('LoginView')
-	return render(request, 'discover.html', {'users': Profile.objects.all().exclude(user = request.user), "profile": get_profile(request)})
+	return render(request, 'discover.html', {'users': Profile.objects.all().exclude(user = request.user).order_by('id'), "profile": get_profile(request)})
 
 def add_photo(request):
 	if not request.user.is_authenticated:
@@ -46,7 +46,6 @@ def add_photo(request):
 	else:
 		form = PhotoForm()
 		return render(request, 'add_photo.html', {'form': form})
-
 
 def redirect_home(request):
     return redirect('photo_list')

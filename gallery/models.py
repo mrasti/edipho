@@ -5,7 +5,9 @@ class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(default='', max_length = 20, blank=True, null=True)
     picture = models.ImageField(blank = True, null = True)
-    default_color = models.CharField(default='Blue', max_length=50)
+    default_color = models.CharField(default='Navy', max_length=50)
+    def __str__(self):
+        return self.name
 
 class Photo(models.Model):
     title = models.CharField(default='New Photo', max_length = 300, blank=True, null=True)
@@ -19,5 +21,5 @@ class Photo(models.Model):
         return self.title
 
 class Meta:
-    ordering = ["time_uploaded"]
+    ordering = ["-time_uploaded"]
 
