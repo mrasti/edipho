@@ -79,7 +79,7 @@ def edit_profile(request):
 def get_profile(request):
 	profile = Profile.objects.filter(user=request.user).first()
 	if profile == None:
-		profile = Profile(user=request.user, name=request.user.username)
+		profile = Profile(user=request.user, name=request.user.username, picture='')
 		profile.save()
 	return profile
 
